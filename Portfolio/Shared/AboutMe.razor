@@ -1,0 +1,137 @@
+<!-- ═══════════════════════════════════════════════════════════
+     ABOUT ME — Sección "Sobre mí"
+     Layout: imagen izquierda con badge flotante | texto derecha.
+     Se invierte en mobile (texto arriba, imagen abajo).
+════════════════════════════════════════════════════════════ -->
+<section id="about" class="relative py-24 lg:py-36 bg-zinc-950 overflow-hidden">
+
+    <!-- Halo decorativo -->
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
+         style="background: radial-gradient(ellipse at top right, rgba(251,191,36,0.04), transparent 60%);">
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- ── ENCABEZADO DE SECCIÓN ─────────────────────────────── -->
+        <div class="flex items-end gap-4 mb-16 lg:mb-20">
+            <!-- Número decorativo grande -->
+            <span class="font-display text-[7rem] lg:text-[9rem] leading-none text-zinc-800/50
+                         select-none" aria-hidden="true">01</span>
+            <div class="pb-2">
+                <p class="text-amber-400 text-xs tracking-[0.3em] uppercase font-semibold mb-1">
+                    Mi historia
+                </p>
+                <h2 class="text-4xl md:text-5xl font-black text-white tracking-tight leading-none">
+                    SOBRE MÍ
+                </h2>
+            </div>
+        </div>
+
+        <!-- ── GRID PRINCIPAL ─────────────────────────────────────── -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+
+            <!-- Columna 1: Imagen -->
+            <div class="relative order-2 lg:order-1">
+
+                <!-- Foto de trabajo — reemplaza con <img> real -->
+                <div class="aspect-[4/5] rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800/80
+                            shadow-[0_25px_70px_rgba(0,0,0,0.5)]">
+
+                    @* <img src="/images/about-working.jpg" alt="Dani trabajando"
+                             class="w-full h-full object-cover object-center" /> *@
+
+                    <!-- Placeholder -->
+                    <div class="w-full h-full bg-gradient-to-br from-zinc-800/60 to-zinc-900
+                                flex items-center justify-center">
+                        <p class="text-zinc-700 text-xs tracking-[0.3em] uppercase">Foto trabajando</p>
+                    </div>
+                </div>
+
+                <!-- Badge flotante ámbar -->
+                <div class="absolute -bottom-5 -right-5 lg:-right-8
+                            bg-amber-400 text-neutral-950 rounded-2xl px-6 py-5 shadow-2xl">
+                    <span class="font-display text-4xl leading-none block">2+</span>
+                    <p class="text-[11px] font-extrabold tracking-widest uppercase mt-1 leading-snug">
+                        Años de<br>experiencia
+                    </p>
+                </div>
+
+                <!-- Línea decorativa lateral -->
+                <div class="hidden lg:block absolute -left-6 top-1/4 bottom-1/4 w-px
+                            bg-gradient-to-b from-transparent via-amber-400/30 to-transparent">
+                </div>
+            </div>
+
+            <!-- Columna 2: Texto -->
+            <div class="order-1 lg:order-2 space-y-6">
+
+                <h3 class="text-2xl md:text-3xl lg:text-[2.1rem] font-bold text-white leading-snug">
+                    La pasión por el detalle<br>
+                    <span class="text-zinc-500 font-light italic">lo convierte en arte.</span>
+                </h3>
+
+                <p class="text-zinc-400 leading-relaxed text-[1.025rem]">
+                    Desde pequeño siempre me fascinó la transformación que puede lograr
+                    una buena tijera y una máquina bien llevada. Lo que empezó como curiosidad
+                    se convirtió en vocación: cada corte es una oportunidad de dar lo mejor.
+                </p>
+
+                <p class="text-zinc-400 leading-relaxed text-[1.025rem]">
+                    Con más de 2 años en barbería profesional, me he especializado en degradados
+                    de alta precisión, perfilado de barba y diseños geométricos a navaja.
+                    Cada cliente es único y merece un trabajo personalizado y con carácter.
+                </p>
+
+                <!-- Skills list en dos columnas -->
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    @foreach (var skill in _skills)
+                    {
+                        <div class="flex items-center gap-2.5 group">
+                            <div class="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0
+                                        group-hover:scale-150 transition-transform duration-200">
+                            </div>
+                            <span class="text-sm text-zinc-300">@skill</span>
+                        </div>
+                    }
+                </div>
+
+                <!-- Quote destacada -->
+                <blockquote class="border-l-2 border-amber-400 pl-5 mt-6">
+                    <p class="text-zinc-300 italic text-[1.025rem] leading-relaxed">
+                        "No corto pelo, construyo estilos."
+                    </p>
+                    <cite class="text-zinc-600 text-xs tracking-widest uppercase mt-2 block not-italic">
+                        — Dani The Barber
+                    </cite>
+                </blockquote>
+
+                <!-- CTA -->
+                <div class="pt-4">
+                    <a href="#contact"
+                       class="inline-flex items-center gap-2 text-amber-400 font-semibold
+                              text-sm tracking-wide group transition-all duration-200
+                              hover:gap-3">
+                        Reservar cita ahora
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private static readonly string[] _skills =
+    [
+        "Degradados y Fades",
+        "Perfilado de Barba",
+        "Cortes Clásicos",
+        "Diseños Geométricos",
+        "Buzz Cut",
+        "Colorimetría"
+    ];
+}

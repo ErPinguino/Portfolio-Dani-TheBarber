@@ -1,0 +1,193 @@
+@using BarberPortfolio.Models
+@using BarberPortfolio.Services
+@inject IPortfolioService PortfolioService
+@implements IDisposable
+
+<!-- ═══════════════════════════════════════════════════════════
+     GALLERY — Portfolio principal
+     Estados: Cargando (skeleton) | Vacío | Éxito (grid).
+     Filtros: llaman al servicio de forma asíncrona con CancellationToken.
+════════════════════════════════════════════════════════════ -->
+<section id="portfolio" class="relative py-24 lg:py-36 bg-zinc-950 overflow-hidden">
+
+    <!-- Halo decorativo izquierda -->
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] pointer-events-none"
+         style="background: radial-gradient(ellipse at bottom left, rgba(251,191,36,0.04), transparent 65%);">
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- ── ENCABEZADO ─────────────────────────────────────────── -->
+        <div class="flex items-end gap-4 mb-10 lg:mb-14">
+            <span class="font-display text-[7rem] lg:text-[9rem] leading-none text-zinc-800/50
+                         select-none" aria-hidden="true">03</span>
+            <div class="pb-2">
+                <p class="text-amber-400 text-xs tracking-[0.3em] uppercase font-semibold mb-1">
+                    Trabajos recientes
+                </p>
+                <h2 class="text-4xl md:text-5xl font-black text-white tracking-tight leading-none">
+                    PORTFOLIO
+                </h2>
+            </div>
+        </div>
+
+        <!-- ── FILTROS ────────────────────────────────────────────── -->
+        <div class="flex flex-wrap gap-2 mb-10" role="group" aria-label="Filtrar por categoría">
+            @foreach (var filter in _filters)
+            {
+                <button @onclick="() => ApplyFilterAsync(filter.Value)"
+                        disabled="@_isLoading"
+                        class="px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200
+                               @GetFilterClass(filter.Value)">
+                    @filter.Label
+                </button>
+            }
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════
+             ESTADO 1: SKELETON de carga (pulse de Tailwind)
+             Se muestra mientras _haircuts es null (carga inicial o cambio de filtro).
+        ═══════════════════════════════════════════════════════════ -->
+        @if (_haircuts is null)
+        {
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                @for (int i = 0; i < 6; i++)
+                {
+                    <div class="animate-pulse rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800/60">
+                        <!-- Bloque de imagen skeleton -->
+                        <div class="aspect-[3/4] bg-zinc-800/70"></div>
+                        <!-- Bloque de texto skeleton -->
+                        <div class="p-4 space-y-2">
+                            <div class="h-2 w-1/4 rounded bg-zinc-800"></div>
+                            <div class="h-4 w-3/4 rounded bg-zinc-700/80"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- ══════════════════════════════════════════════════════════
+             ESTADO 2: VACÍO — sin resultados para el filtro activo
+        ═══════════════════════════════════════════════════════════ -->
+        else if (_haircuts.Count == 0)
+        {
+            <div class="flex flex-col items-center justify-center py-28 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-zinc-800 mb-6"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5
+                             l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5
+                             a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0
+                             002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25z" />
+                </svg>
+                <p class="text-zinc-500 font-medium text-lg">Sin resultados</p>
+                <p class="text-zinc-700 text-sm mt-2 max-w-xs">
+                    No hay trabajos publicados en esta categoría todavía.
+                </p>
+                <button @onclick='() => ApplyFilterAsync("all")'
+                        class="mt-6 px-5 py-2 text-sm font-semibold text-amber-400
+                               border border-amber-400/30 rounded-full
+                               hover:bg-amber-400/10 transition-all duration-200">
+                    Ver todos los trabajos
+                </button>
+            </div>
+        }
+
+        <!-- ══════════════════════════════════════════════════════════
+             ESTADO 3: ÉXITO — grid masonry de tarjetas
+        ═══════════════════════════════════════════════════════════ -->
+        else
+        {
+            <!-- Contador de resultados -->
+            <p class="text-zinc-600 text-sm mb-6 tracking-wide">
+                @_haircuts.Count trabajo@(_haircuts.Count == 1 ? "" : "s") encontrado@(_haircuts.Count == 1 ? "" : "s")
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                @foreach (var haircut in _haircuts)
+                {
+                    <GalleryCard Haircut="haircut" />
+                }
+            </div>
+        }
+
+        <!-- ── TOOLTIP HOVER (solo desktop) ─────────────────────── -->
+        <p class="hidden md:block text-center text-zinc-700 text-xs mt-10 tracking-wide">
+            Pasa el cursor sobre las fotos para ver el antes/después ·
+            <span class="text-amber-400/60">● Indica comparativa disponible</span>
+        </p>
+    </div>
+</section>
+
+@code {
+    // Null = cargando, lista vacía = sin resultados, lista con items = éxito.
+    private List<Haircut>? _haircuts;
+    private string _activeFilter = "all";
+    private bool _isLoading;
+
+    // CancellationTokenSource para cancelar peticiones en vuelo si el componente
+    // se destruye (navegación del usuario) o si el filtro cambia antes de respuesta.
+    private readonly CancellationTokenSource _cts = new();
+
+    private record FilterOption(string Label, string Value);
+
+    private static readonly FilterOption[] _filters =
+    [
+        new("Todos",       "all"),
+        new("Degradados",  "fade"),
+        new("Barbas",      "beard"),
+        new("Diseños",     "design")
+    ];
+
+    protected override async Task OnInitializedAsync() =>
+        await LoadDataAsync("all", _cts.Token);
+
+    /// <summary>
+    /// Cambia el filtro activo y recarga los datos con el nuevo criterio.
+    /// Muestra el skeleton mientras carga poniendo _haircuts = null.
+    /// </summary>
+    private async Task ApplyFilterAsync(string filterValue)
+    {
+        if (filterValue == _activeFilter && _haircuts is not null) return;
+
+        _activeFilter = filterValue;
+        _haircuts     = null;     // → activa skeleton
+        _isLoading    = true;
+        StateHasChanged();
+
+        await LoadDataAsync(filterValue, _cts.Token);
+    }
+
+    private async Task LoadDataAsync(string filter, CancellationToken ct)
+    {
+        try
+        {
+            _haircuts = filter == "all"
+                ? await PortfolioService.GetActivePortfolioAsync(ct)
+                : await PortfolioService.GetPortfolioByCategoryAsync(filter, ct);
+        }
+        catch (OperationCanceledException)
+        {
+            // Componente destruido o nuevo filtro aplicado: ignorar silenciosamente.
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    /// <summary>
+    /// Devuelve las clases Tailwind del botón de filtro según su estado activo/inactivo.
+    /// </summary>
+    private string GetFilterClass(string filterValue) =>
+        filterValue == _activeFilter
+            ? "bg-amber-400 text-neutral-950 border-amber-400 font-bold"
+            : "bg-transparent text-zinc-500 border-zinc-800 hover:text-white hover:border-zinc-600";
+
+    /// <summary>Cancela cualquier petición en vuelo al destruir el componente.</summary>
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
+}

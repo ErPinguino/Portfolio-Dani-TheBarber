@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Modelo Isolated Worker: el proceso de la función es un ejecutable independiente
+         del host de Azure Functions, lo que permite usar todas las características de .NET 8. -->
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+    <RootNamespace>BarberPortfolio.Api</RootNamespace>
+    <AssemblyName>BarberPortfolio.Api</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Recomendado para Azure Functions: evita advertencias de RuntimeIdentifier en CI. -->
+    <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Core del modelo Isolated Worker. -->
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.23.0" />
+
+    <!-- Extensión para el trigger HTTP: HttpRequestData, HttpResponseData, etc.
+         Verificar la última versión en NuGet al inicializar el proyecto. -->
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.2.0" />
+
+    <!-- SDK de compilación: genera el archivo de metadatos functions.metadata
+         que el host necesita para descubrir las funciones en tiempo de ejecución.
+         OutputItemType=Analyzer lo incluye solo en build, no en el output final. -->
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.4" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+
+    <!-- MailKit: librería de referencia para SMTP en .NET.
+         Elegida sobre SendGrid porque:
+         - No requiere cuenta de terceros (funciona con cualquier SMTP: Gmail, Outlook, etc.).
+         - API moderna y async-first.
+         - Soporte nativo de TLS/StartTLS y autenticación OAuth2.
+         Alternativa SendGrid: usar SendGrid si ya tienes cuenta y priorizas deliverability. -->
+    <PackageReference Include="MailKit" Version="4.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.8" />
+  </ItemGroup>
+
+</Project>

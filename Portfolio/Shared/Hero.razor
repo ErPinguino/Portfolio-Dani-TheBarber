@@ -1,0 +1,188 @@
+<!-- ═══════════════════════════════════════════════════════════
+     HERO — Portada principal
+     Diseño: split layout (texto + foto) en desktop,
+     stacked en mobile. Tipografía de impacto Bebas Neue.
+════════════════════════════════════════════════════════════ -->
+<section id="home"
+         class="relative min-h-screen flex items-center bg-neutral-950 overflow-hidden">
+
+    <!-- ── DECORACIONES DE FONDO ──────────────────────────────── -->
+
+    <!-- Cuadrícula sutil tipo studio -->
+    <div class="absolute inset-0 pointer-events-none"
+         style="background-image: linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+                                  linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+                background-size: 60px 60px;">
+    </div>
+
+    <!-- Halo de color ámbar arriba-derecha -->
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
+         style="background: radial-gradient(ellipse at top right, rgba(251,191,36,0.06) 0%, transparent 65%);">
+    </div>
+
+    <!-- Gradiente de fundido hacia la siguiente sección -->
+    <div class="absolute bottom-0 left-0 right-0 h-40 pointer-events-none
+                bg-gradient-to-t from-neutral-950 to-transparent">
+    </div>
+
+    <!-- ── CONTENIDO PRINCIPAL ────────────────────────────────── -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center
+                    min-h-[calc(100vh-80px)]">
+
+            <!-- Columna izquierda: texto -->
+            <div class="flex flex-col justify-center">
+
+                <!-- Etiqueta superior -->
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="h-px w-10 bg-amber-400"></div>
+                    <span class="text-amber-400 text-xs tracking-[0.35em] uppercase font-semibold">
+                        Barber &amp; Hair Stylist
+                    </span>
+                </div>
+
+                <!-- Título principal con clamp() para máxima flexibilidad -->
+                <h1 class="font-display leading-[0.9] tracking-tight"
+                    style="font-size: clamp(4.5rem, 13vw, 9.5rem);">
+                    <span class="block text-white">DANI</span>
+                    <span class="block" style="color: #3f3f46;">THE</span>
+                    <span class="block text-white">BARBER</span>
+                </h1>
+
+                <!-- Divisor decorativo con tijera inline SVG -->
+                <div class="flex items-center gap-4 my-8">
+                    <div class="h-px w-16 bg-zinc-800"></div>
+                    <!-- Tijera SVG (Heroicons outline) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0 text-amber-400"
+                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="6"    cy="6"    r="3" />
+                        <circle cx="6"    cy="18"   r="3" />
+                        <line   x1="20"   y1="4"    x2="8.12" y2="15.88" />
+                        <line   x1="14.47" y1="14.48" x2="20"  y2="20"   />
+                        <line   x1="8.12" y1="8.12"  x2="12"  y2="12"   />
+                    </svg>
+                    <div class="h-px w-16 bg-zinc-800"></div>
+                </div>
+
+                <!-- Descripción -->
+                <p class="text-zinc-400 text-base md:text-[1.05rem] leading-relaxed max-w-[440px]">
+                    Arte y precisión en cada corte. Especialista en degradados, perfilado de barba
+                    y diseños geométricos personalizados en Elche.
+                </p>
+
+                <!-- ── CTA BUTTONS ────────────────────────────────── -->
+                <div class="flex flex-wrap gap-4 mt-10">
+
+                    <!-- CTA primario: fondo blanco, texto negro, shadow on hover -->
+                    <a href="#portfolio"
+                       class="group inline-flex items-center gap-2.5
+                              px-7 py-4 bg-white text-neutral-950 font-bold text-sm tracking-widest
+                              rounded-xl transition-all duration-300
+                              hover:bg-amber-400 hover:scale-[1.03]
+                              hover:shadow-[0_0_40px_rgba(251,191,36,0.25)]
+                              active:scale-100">
+                        <span>VER TRABAJOS</span>
+                        <!-- Flecha animada -->
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+
+                    <!-- CTA secundario: borde sutil, glow ámbar en hover -->
+                    <a href="#contact"
+                       class="group inline-flex items-center gap-2.5
+                              px-7 py-4 border border-zinc-700 text-zinc-300 font-medium text-sm tracking-widest
+                              rounded-xl transition-all duration-300
+                              hover:border-amber-400/60 hover:text-amber-400 hover:bg-amber-400/5
+                              active:scale-[0.98]">
+                        <span>CONTACTAR</span>
+                    </a>
+                </div>
+
+                <!-- ── STATS ──────────────────────────────────────── -->
+                <div class="flex gap-8 mt-14 pt-8 border-t border-zinc-800/60">
+                    @foreach (var (num, label) in _stats)
+                    {
+                        <div>
+                            <span class="font-display text-4xl @(label == _stats[0].Label ? "text-amber-400" : "text-white")">
+                                @num
+                            </span>
+                            <p class="text-zinc-600 text-xs tracking-[0.2em] uppercase mt-1.5 font-medium">
+                                @label
+                            </p>
+                        </div>
+                        @if (label != _stats[^1].Label)
+                        {
+                            <div class="w-px bg-zinc-800 self-stretch"></div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Columna derecha: foto del barbero -->
+            <div class="relative hidden lg:flex justify-center items-center">
+
+                <!-- Blob de fondo -->
+                <div class="absolute w-72 h-72 rounded-full opacity-30 blur-3xl"
+                     style="background: radial-gradient(circle, rgba(251,191,36,0.12), transparent);">
+                </div>
+
+                <!-- Marco decorativo con esquinas ámbar -->
+                <div class="relative w-full max-w-[360px]">
+                    <div class="absolute -top-4 -left-4 w-16 h-16 border-l-2 border-t-2 border-amber-400/60"></div>
+                    <div class="absolute -bottom-4 -right-4 w-16 h-16 border-r-2 border-b-2 border-amber-400/60"></div>
+
+                    <!-- Contenedor de imagen — reemplaza el div interno con <img> real -->
+                    <div class="aspect-[3/4] rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800/80
+                                shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
+
+                        @* Reemplaza con tu foto:
+                           <img src="/images/hero.jpg" alt="Dani The Barber" class="w-full h-full object-cover object-top" /> *@
+
+                        <!-- Placeholder mientras no hay foto -->
+                        <div class="w-full h-full flex flex-col items-center justify-center gap-4
+                                    bg-gradient-to-br from-zinc-800/60 to-zinc-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 text-zinc-700"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75">
+                                <circle cx="6" cy="6" r="3" />
+                                <circle cx="6" cy="18" r="3" />
+                                <line x1="20" y1="4" x2="8.12" y2="15.88" />
+                                <line x1="14.47" y1="14.48" x2="20" y2="20" />
+                                <line x1="8.12" y1="8.12" x2="12" y2="12" />
+                            </svg>
+                            <p class="text-zinc-700 text-xs tracking-[0.3em] uppercase">Tu foto aquí</p>
+                        </div>
+                    </div>
+
+                    <!-- Badge flotante de años de experiencia -->
+                    <div class="absolute -bottom-5 -left-5 bg-zinc-900 border border-zinc-700
+                                rounded-2xl px-5 py-4 shadow-xl">
+                        <span class="font-display text-3xl text-amber-400 leading-none">2+</span>
+                        <p class="text-zinc-400 text-xs tracking-widest uppercase mt-1 font-medium leading-snug">
+                            Años de<br>experiencia
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Indicador de scroll -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2
+                text-zinc-700 pointer-events-none">
+        <span class="text-[10px] tracking-[0.35em] uppercase">Scroll</span>
+        <div class="w-px h-10 bg-gradient-to-b from-zinc-600 to-transparent animate-pulse"></div>
+    </div>
+</section>
+
+@code {
+    private static readonly (string Num, string Label)[] _stats =
+    [
+        ("+200", "Clientes"),
+        ("2",    "Años exp."),
+        ("★ 5",  "Valoración")
+    ];
+}

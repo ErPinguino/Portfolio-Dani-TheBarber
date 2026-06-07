@@ -1,0 +1,26 @@
+# === REGLAS PARA .NET (Blazor y Azure Functions) ===
+bin/
+obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+
+# 🔒 ¡CRÍTICO! No subir las contraseñas locales de la API
+api/local.settings.json
+
+# === REGLAS PARA NODE.JS (Sanity CMS) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.sanity/
+danithebarber/dist/
+
+# === ARCHIVOS DEL SISTEMA OPERATIVO ===
+.DS_Store
+Thumbs.db
+Desktop.ini

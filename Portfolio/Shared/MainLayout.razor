@@ -1,0 +1,129 @@
+@inherits LayoutComponentBase
+
+@* REQUISITO EXTERNO: añadir en wwwroot/index.html antes de </head>:
+   <script src="https://cdn.tailwindcss.com"></script>
+   Y antes de </body>:
+   <script>
+       window.scrollToSection = (id) =>
+           document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   </script>
+*@
+
+<HeadContent>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&display=swap"
+          rel="stylesheet" />
+    <style>
+        html  { scroll-behavior: smooth; }
+        body  { background-color: #0a0a0a; font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Bebas Neue', sans-serif; }
+
+        /* Evita el fondo azul del autocompletar del navegador en campos oscuros */
+        input:-webkit-autofill,
+        textarea:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 40px #18181b inset !important;
+            -webkit-text-fill-color: #fff !important;
+            caret-color: #fff;
+        }
+
+        /* Barra de scroll personalizada */
+        ::-webkit-scrollbar       { width: 4px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fbbf24; }
+    </style>
+</HeadContent>
+
+<div class="bg-neutral-950 text-white min-h-screen flex flex-col">
+    <Navbar />
+
+    <main class="flex-1">
+        @Body
+    </main>
+
+    <!-- ─── FOOTER ──────────────────────────────────────────────────── -->
+    <footer class="bg-zinc-950 border-t border-zinc-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+
+                <!-- Marca -->
+                <div>
+                    <p class="font-display text-3xl tracking-[0.12em] text-white">DANI THE BARBER</p>
+                    <p class="text-zinc-500 text-sm mt-2 leading-relaxed">
+                        Barber & Hair Stylist<br>Elche, Alicante
+                    </p>
+                    <!-- Redes sociales (placeholder) -->
+                    <div class="flex gap-4 mt-5">
+                        @foreach (var social in _socials)
+                        {
+                            <a href="@social.Url" target="_blank" rel="noopener noreferrer"
+                               class="text-zinc-600 hover:text-amber-400 transition-colors duration-200 text-xs tracking-widest uppercase">
+                                @social.Name
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <!-- Navegación -->
+                <nav class="flex flex-col gap-3 md:items-center">
+                    <p class="text-zinc-600 text-xs tracking-[0.25em] uppercase font-semibold mb-1">Menú</p>
+                    @foreach (var (label, href) in _footerLinks)
+                    {
+                        <a href="@href"
+                           class="text-zinc-500 text-sm hover:text-amber-400 transition-colors duration-200">
+                            @label
+                        </a>
+                    }
+                </nav>
+
+                <!-- Horarios -->
+                <div>
+                    <p class="text-zinc-600 text-xs tracking-[0.25em] uppercase font-semibold mb-3">Horario</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Lunes – Viernes</span>
+                            <span class="text-white">9:00 – 20:00</span>
+                        </div>
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Sábados</span>
+                            <span class="text-white">9:00 – 14:00</span>
+                        </div>
+                        <div class="flex justify-between text-zinc-400">
+                            <span>Domingos</span>
+                            <span class="text-zinc-600">Cerrado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Separador + copyright -->
+            <div class="border-t border-zinc-800/60 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-zinc-700 text-xs">
+                    © @DateTime.Now.Year · Dani The Barber · Todos los derechos reservados.
+                </p>
+                <p class="text-zinc-700 text-xs">
+                    Diseño &amp; Desarrollo — Portfolio Web
+                </p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+@code {
+    private static readonly (string Label, string Href)[] _footerLinks =
+    [
+        ("Inicio",    "#home"),
+        ("Sobre mí",  "#about"),
+        ("Servicios", "#services"),
+        ("Portfolio", "#portfolio"),
+        ("Contacto",  "#contact")
+    ];
+
+    private static readonly (string Name, string Url)[] _socials =
+    [
+        ("Instagram", "https://instagram.com"),
+        ("TikTok",    "https://tiktok.com")
+    ];
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dani The Barber | Studio</title>
+    <base href="/" />
+    <!-- Fuentes o iconos globales si los necesitas -->
+    <link rel="icon" type="image/png" href="favicon.png" />
+    
+    <!-- 1. El CDN de Tailwind CSS que te pidió Claude -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-neutral-950 text-white">
+    <!-- El contenedor donde Blazor renderiza toda la aplicación -->
+    <div id="app">
+        <!-- Pantalla de carga limpia mientras arranca WebAssembly -->
+        <div class="flex min-h-screen items-center justify-center">
+            <div class="text-center">
+                <p class="text-xl font-bold tracking-widest uppercase animate-pulse text-zinc-500">
+                    Cargando Studio...
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interfaz por defecto para errores en Blazor -->
+    <div id="blazor-error-ui" class="hidden fixed bottom-0 left-0 w-full bg-red-900 text-white p-4 z-50 text-center font-medium">
+        Ha ocurrido un error inesperado en la aplicación.
+        <a href="" class="reload underline ml-2 font-bold hover:text-zinc-200">Recargar web</a>
+        <a class="dismiss absolute right-4 top-4 cursor-pointer text-xl">✕</a>
+    </div>
+
+    <!-- El script nativo y obligatorio que arranca Blazor WebAssembly -->
+    <script src="_framework/blazor.webassembly.js"></script>
+
+    <!-- 2. El script de JavaScript para el Smooth Scroll que te pidió Claude -->
+    <script>
+        window.scrollToSection = (id) => {
+            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+    </script>
+</body>
+
+</html>
